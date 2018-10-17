@@ -5,56 +5,32 @@ Application::Application() {
 	hnd = GetStdHandle(STD_OUTPUT_HANDLE);
 }
 
-char Application::getEncryptionChoice()
+int Application::getEncryptionChoice()
 {
-	char choice = 0;
-	print("Which cipher do you want now ? ");
-	std::cin >> choice;
-	if (isWithInTheRange(choice, '1', '7'))
-	{
-		return choice;
-	}
-	return 0;
+	std::string title = "Choose any one from the following ciphers to proceed : ";
+	std::string options[] = { "Bitwise", "Block", "Caesar", "Stream", "Transpose", "Vigenere", "Xor" };
+	return retrieveMenuChoice(title, options, 7);
 }
 
-char Application::getMainMenuChoice()
+int Application::getMainMenuChoice()
 {
-	char choice = 0;
-	print("What are you about to do ? ");
-	std::cin >> choice;
-	if (isWithInTheRange(choice, '1', '3'))
-	{
-		return choice;
-	}
-	return 0;
+	std::string title = "What can I do for you ?";
+	std::string options[] = { "Encryption", "Decryption", "Quit Program" };
+	return retrieveMenuChoice(title, options, 3);
 }
 
-char Application::getInputChoice()
+int Application::getInputChoice()
 {
-	char choice = 0;
-	print("How can I get the input ? ");
-	std::cin >> choice;
-	if (isWithInTheRange(choice, '1', '2'))
-	{
-		return choice;
-	}
-	return 0;
+	std::string title = "How are you going to enter the information ?";
+	std::string options[] = { "Type it in console", "Get it from a file" };
+	return retrieveMenuChoice(title, options, 2);
 }
 
 std::string *Application::getInputInfo()
 {
-	showInputOptions();
 	int inputForm = getInputChoice();
 	std::string *input;
-	while (inputForm == 0)
-	{
-		printNextLine();
-		println("Try to give input from the available options.");
-		printNextLine();
-		showInputOptions();
-		inputForm = getInputChoice();
-	}
-	if (inputForm == 1)
+	if (inputForm == 0)
 	{
 		input = new std::string;
 		printNextLine();
@@ -147,21 +123,9 @@ CipherEncryption *Application::getSuitableCipher(int options)
 	return cipher;
 }
 
-void Application::showEncryptionOptions()
-{
-	println("Types of ciphers available : ");
-	println("1 -> Bitwise");
-	println("2 -> Block");
-	println("3 -> Caesar");
-	println("4 -> Stream");
-	println("5 -> Transpose");
-	println("6 -> Vigenere");
-	println("7 -> Xor (Exclusive OR)");
-}
-
 void Application::showMainScreen()
 {
-	srand(time(NULL));
+	srand(static_cast<unsigned int>(time(NULL)));
 	while (true) {
 		std::system("cls");
 		wAttrs = rand() % 14 + 1;
@@ -203,7 +167,7 @@ void Application::showMainScreen()
                             \______/
 
         )" << std::endl;
-		std::cout << "Press Enter to Continue........";
+		std::cout << "\tPress Enter to Continue........";
 		if (GetAsyncKeyState(VK_RETURN)) {
 			return;
 		}
@@ -219,11 +183,11 @@ int Application::retrieveMenuChoice(std::string title, std::string choices[], in
 		SetConsoleTextAttribute(hnd, wAttrs);
 		std::cout << title << std::endl;
 		for (int i = 0; i != size; i++) {
-			std::cout << '\t';
+			std::cout << "  ";
 			if (i == pointer) {
 				SetConsoleTextAttribute(hnd, wAttrs * 16);
 			}
-			std::cout << choices[i] << std::endl;
+			std::cout << (i + 1) << ") " << choices[i] << std::endl;
 			SetConsoleTextAttribute(hnd, wAttrs);
 		}
 		while (true) {
@@ -239,29 +203,15 @@ int Application::retrieveMenuChoice(std::string title, std::string choices[], in
 				pointer++;
 				if (pointer == size) {
 					pointer = 0;
-					break;
 				}
+				break;
 			}
 			else if (GetAsyncKeyState(VK_RETURN)) {
 				return pointer;
 			}
+			Sleep(150);
 		}
 	}
-}
-
-void Application::showMainMenu()
-{
-	println("What to do now ?");
-	println("1 -> Encryption");
-	println("2 -> Decryption");
-	println("3 -> Exit");
-}
-
-void Application::showInputOptions()
-{
-	println("How are you going to enter the information ?");
-	println("1 -> Type it now");
-	println("2 -> Retrieve it from a existing file");
 }
 
 void Application::showEncryptedMessage(std::string *message)
@@ -287,16 +237,7 @@ void Application::saveInfoToFile(std::string *content)
 
 void Application::manageEncryption()
 {
-	showEncryptionOptions();
 	int encryptionChoice = getEncryptionChoice();
-	while (encryptionChoice == 0)
-	{
-		printNextLine();
-		println("Try to choose an available cipher option.");
-		printNextLine();
-		showEncryptionOptions();
-		encryptionChoice = getEncryptionChoice();
-	}
 	printNextLine();
 	std::string *message = getInputInfo();
 	CipherEncryption *cipher = getSuitableCipher(encryptionChoice);
@@ -329,13 +270,13 @@ void Application::manageDecryption()
 	std::string *message = getInputInfo();
 	std::string key = message->substr(message->size() - 3, 3);
 	int type = 0;
-	if (key.find('x') != 1 && !areTheSame(key[0], key[2]))
+	if (key.find('x') != 1 || key[0] != key[2])
 	{
 		return;
 	}
 	else
 	{
-		type = key[0] - '0' + 1;
+		type = key[0] - '0';
 	}
 	*message = message->substr(0, message->size() - 3);
 	CipherEncryption *cipher = getSuitableCipher(type);
@@ -379,34 +320,21 @@ void Application::showEndCredits()
 void Application::runApp()
 {
 	showMainScreen();
-	std::system("pause>nul");
-	char menuChoice = 0;
 	do
 	{
 		clearScreen();
-		showMainMenu();
-		menuChoice = getMainMenuChoice();
-		while (menuChoice == 0)
-		{
-			printNextLine();
-			println("Try to follow the given instructions.");
-			printNextLine();
-			showMainMenu();
-			menuChoice = getMainMenuChoice();
-		}
+		int menuChoice = getMainMenuChoice();
 		printNextLine();
-		switch (menuChoice)
-		{
-		case '1':
+		if (menuChoice == 0) {
 			manageEncryption();
-			break;
-		case '2':
+		}
+		else if (menuChoice == 1) {
 			manageDecryption();
-			break;
-		default:
+		}
+		else {
 			break;
 		}
-	} while (menuChoice != '3');
+	} while (true);
 	clearScreen();
 	showEndCredits();
 	std::cin.get();

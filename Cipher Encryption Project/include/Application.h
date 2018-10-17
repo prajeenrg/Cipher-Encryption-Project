@@ -17,13 +17,11 @@ class Application
 {
 	WORD wAttrs;
 	HANDLE hnd;
-	void showMainMenu();
-	char getMainMenuChoice();
-	void showEncryptionOptions();
+	int getMainMenuChoice();
+	int getEncryptionChoice();
 	void showMainScreen();
-	int retrieveMenuChoice(std::string, std::string []);
-	void showInputOptions();
-	char getInputChoice();
+	int retrieveMenuChoice(std::string, std::string [], int);
+	int getInputChoice();
 	std::string getFileInfo();
 	std::string getSaveFileInfo();
 	std::string *getInputInfo();

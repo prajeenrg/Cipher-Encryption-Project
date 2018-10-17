@@ -11,11 +11,11 @@ class CipherEncryption
 };
 
 enum class CipherType {
-	BITWISE = 1,
-	BLOCK = 2,
-	CAESAR = 3,
-	STREAM = 4,
-	TRANSPOSE = 5,
-	VIGENERE = 6,
-	XOR = 7
+	BITWISE,
+	BLOCK,
+	CAESAR,
+	STREAM,
+	TRANSPOSE,
+	VIGENERE,
+	XOR
 };
