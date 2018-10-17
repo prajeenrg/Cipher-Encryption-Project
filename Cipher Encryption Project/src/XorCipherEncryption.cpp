@@ -10,27 +10,24 @@ std::string XorCipherEncryption::getEncryptionKey()
 	return "6x6";
 }
 
-std::string *XorCipherEncryption::encrypt(std::string &message)
+std::string *XorCipherEncryption::encrypt(std::string *message)
 {
 	std::string *output = new std::string;
-	char value = 0;
-	for (char &letter : message)
+	for (char &letter : *message)
 	{
-		value = letter ^ key;
-		output->push_back(value);
+		output->push_back(letter ^ key);
 	}
 	output->append(getEncryptionKey());
 	return output;
 }
 
-std::string *XorCipherEncryption::decrypt(std::string &cipher)
+std::string *XorCipherEncryption::decrypt(std::string *cipher)
 {
 	std::string *output = new std::string;
 	char value = 0;
-	for (char &letter : cipher)
+	for (char &letter : *cipher)
 	{
-		value = letter ^ key;
-		output->push_back(value);
+		output->push_back(letter ^ key);
 	}
 	return output;
 }

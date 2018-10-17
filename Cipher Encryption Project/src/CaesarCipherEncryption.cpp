@@ -5,10 +5,10 @@ std::string CaesarCipherEncryption::getEncryptionKey()
 	return "2x2";
 }
 
-std::string *CaesarCipherEncryption::encrypt(std::string &message)
+std::string *CaesarCipherEncryption::encrypt(std::string *message)
 {
 	std::string *output = new std::string;
-	for (char &letter : message)
+	for (char &letter : *message)
 	{
 		output->push_back(letter + 5);
 	}
@@ -16,10 +16,10 @@ std::string *CaesarCipherEncryption::encrypt(std::string &message)
 	return output;
 }
 
-std::string *CaesarCipherEncryption::decrypt(std::string &message)
+std::string *CaesarCipherEncryption::decrypt(std::string *message)
 {
 	std::string *output = new std::string;
-	for (char &letter : message)
+	for (char &letter : *message)
 	{
 		output->push_back(letter - 5);
 	}

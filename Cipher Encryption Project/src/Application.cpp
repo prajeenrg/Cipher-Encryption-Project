@@ -229,7 +229,7 @@ void Application::manageEncryption()
 	std::cout << std::endl;
 	std::string *message = getInputInfo();
 	CipherEncryption *cipher = getSuitableCipher(encryptionChoice);
-	std::string *encrypted = cipher->encrypt(*message);
+	std::string *encrypted = cipher->encrypt(message);
 	delete message;
 	std::cout << std::endl;
 	char seeEncrypted = 0;
@@ -272,7 +272,7 @@ void Application::manageDecryption()
 	}
 	*message = message->substr(0, message->size() - 3);
 	CipherEncryption *cipher = getSuitableCipher(type);
-	std::string *decrypted = cipher->decrypt(*message);
+	std::string *decrypted = cipher->decrypt(message);
 	delete message;
 	char seeDecrypted = 0;
 	std::cout << "Do you want to see decrypted message (Y/n) ? ";

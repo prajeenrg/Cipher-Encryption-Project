@@ -5,10 +5,10 @@ std::string BitwiseCipherEncryption::getEncryptionKey()
 	return "0x0";
 }
 
-std::string *BitwiseCipherEncryption::encrypt(std::string &message)
+std::string *BitwiseCipherEncryption::encrypt(std::string *message)
 {
 	std::string *output = new std::string;
-	for (char &letter : message)
+	for (char &letter : *message)
 	{
 		output->push_back(~letter);
 	}
@@ -16,10 +16,10 @@ std::string *BitwiseCipherEncryption::encrypt(std::string &message)
 	return output;
 }
 
-std::string *BitwiseCipherEncryption::decrypt(std::string &cipher)
+std::string *BitwiseCipherEncryption::decrypt(std::string *cipher)
 {
 	std::string *output = new std::string;
-	for (char &letter : cipher)
+	for (char &letter : *cipher)
 	{
 		output->push_back(~letter);
 	}
