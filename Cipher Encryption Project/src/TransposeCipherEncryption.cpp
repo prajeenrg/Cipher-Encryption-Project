@@ -2,7 +2,7 @@
 
 std::string TransposeCipherEncryption::getEncryptionKey()
 {
-    return "5x5";
+    return "4x4";
 }
 
 std::string *TransposeCipherEncryption::encrypt(std::string &message)

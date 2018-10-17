@@ -33,22 +33,22 @@ std::string *Application::getInputInfo()
 	if (inputForm == 0)
 	{
 		input = new std::string;
-		printNextLine();
-		println("Please end your message with a backtick symbol (`) ");
+		std::cout << std::endl;
+		std::cout << "\tPlease end your message with a backtick symbol (`)";
+		std::cout << std::endl;
 		std::getline(std::cin, *input, '`');
 	}
 	else
 	{
-		printNextLine();
-		std::cin.ignore();
+		std::cout << std::endl;
 		std::string fileloc = getFileInfo();
 		FileUtils file;
 		input = file.readFromFile(fileloc);
 		while (input == nullptr)
 		{
-			printNextLine();
-			println("The file requested is not accessible. Try again.");
-			printNextLine();
+			std::cout << std::endl;
+			std::cout << "The file requested is not accessible. Try again.";
+			std::cout << std::endl;
 			fileloc = getFileInfo();
 			input = file.readFromFile(fileloc);
 		}
@@ -59,9 +59,9 @@ std::string *Application::getInputInfo()
 std::string Application::getFileInfo()
 {
 	std::string filedir, filename;
-	print("Where can I get the file ? ");
+	std::cout << "Where can I get the file ? ";
 	std::getline(std::cin, filedir);
-	print("What is the name of the file ? ");
+	std::cout << "What is the name of the file ? ";
 	std::getline(std::cin, filename);
 	if (!filedir.empty())
 	{
@@ -74,10 +74,9 @@ std::string Application::getFileInfo()
 std::string Application::getSaveFileInfo()
 {
 	std::string filedir, filename;
-	std::cin.ignore();
-	print("Where should the file be stored ? ");
+	std::cout << "Where should the file be stored ? ";
 	std::getline(std::cin, filedir);
-	print("What should be the name of the file ? ");
+	std::cout << "What should be the name of the file ? ";
 	std::getline(std::cin, filename);
 	if (!filedir.empty())
 	{
@@ -214,57 +213,48 @@ int Application::retrieveMenuChoice(std::string title, std::string choices[], in
 	}
 }
 
-void Application::showEncryptedMessage(std::string *message)
-{
-	println("Here is your encrypted message : ");
-	println(message);
-}
-
-void Application::showDecryptedCipher(std::string *message)
-{
-	println("Here is your decrypted cipher text : ");
-	println(message);
-}
-
 void Application::saveInfoToFile(std::string *content)
 {
 	std::string filedir = getSaveFileInfo();
 	FileUtils file;
 	file.writeToFile(filedir, content);
-	println("Voila! The file has been saved.");
-	std::cin.get();
+	std::cout << "Voila! The file has been saved.";
+	std::system("pause>nul");
 }
 
+// TODO : needs some refactoring
 void Application::manageEncryption()
 {
 	int encryptionChoice = getEncryptionChoice();
-	printNextLine();
+	std::cout << std::endl;
 	std::string *message = getInputInfo();
 	CipherEncryption *cipher = getSuitableCipher(encryptionChoice);
 	std::string *encrypted = cipher->encrypt(*message);
-	printNextLine();
+	delete message;
+	std::cout << std::endl;
 	char seeEncrypted = 0;
-	print("Do you want to see encrypted message ? (Y/n) ");
+	std::cout << "Do you want to see encrypted message (Y/n) ? ";
 	std::cin >> seeEncrypted;
-	if (areTheSame(seeEncrypted, 'Y') || areTheSame(seeEncrypted, 'y'))
+	if (tolower(seeEncrypted) == 'y')
 	{
-		printNextLine();
-		showEncryptedMessage(encrypted);
+		std::cout << std::endl;
+		std::cout << "The information has been encrypted to the following : " << std::endl;
+		std::cout << encrypted->c_str() << std::endl;
 	}
-	printNextLine();
+	std::cout << std::endl;
 	char saveEncrypted = 0;
-	print("Do you want to save encrypted message ? (Y/n) ");
+	std::cout << "Do you want to save encrypted message (Y/n) ? ";
 	std::cin >> saveEncrypted;
-	if (areTheSame(saveEncrypted, 'Y') || areTheSame(saveEncrypted, 'y'))
+	if (tolower(saveEncrypted) ==  'y')
 	{
-		printNextLine();
+		std::cout << std::endl;
 		saveInfoToFile(encrypted);
 	}
-	delete message;
 	delete encrypted;
 	delete cipher;
 }
 
+// TODO : needs some refactoring
 void Application::manageDecryption()
 {
 	std::string *message = getInputInfo();
@@ -272,6 +262,8 @@ void Application::manageDecryption()
 	int type = 0;
 	if (key.find('x') != 1 || key[0] != key[2])
 	{
+		std::cout << std::endl << "There is no suitable cipher available for decryption.";
+		std::system("pause>nul");
 		return;
 	}
 	else
@@ -281,31 +273,34 @@ void Application::manageDecryption()
 	*message = message->substr(0, message->size() - 3);
 	CipherEncryption *cipher = getSuitableCipher(type);
 	std::string *decrypted = cipher->decrypt(*message);
-	printNextLine();
+	delete message;
 	char seeDecrypted = 0;
-	print("Do you want to see decrypted message ? (Y/n) ");
+	std::cout << "Do you want to see decrypted message (Y/n) ? ";
 	std::cin >> seeDecrypted;
-	if (areTheSame(seeDecrypted, 'Y') || areTheSame(seeDecrypted, 'y'))
+	if (tolower(seeDecrypted) ==  'y')
 	{
-		showDecryptedCipher(decrypted);
+		std::cout << std::endl;
+		std::cout << "The given information has been decrypted to the following : ";
+		std::cout << std::endl;
+		std::cout << decrypted->c_str() << std::endl;
 	}
-	printNextLine();
+	std::cout << std::endl;;
 	char saveDecrypted = 0;
-	print("Do you want to save decrypted message ? (Y/n) ");
+	std::cout << "Do you want to save decrypted message (Y/n) ?";
 	std::cin >> saveDecrypted;
-	if (areTheSame(saveDecrypted, 'Y') || areTheSame(saveDecrypted, 'y'))
+	if (tolower(saveDecrypted) == 'y')
 	{
-		printNextLine();
+		std::cout << std::endl;
 		saveInfoToFile(decrypted);
 	}
-	delete cipher;
 	delete decrypted;
 	delete message;
 }
 
+/* Currently disabled for better working
 void Application::showEndCredits()
 {
-	clearScreen();
+	std::system("cls");
 	std::string title = "Project done by the following students of XII - A :";
 	std::string decoration(title.size(), '-');
 	printHeading(title, decoration);
@@ -315,16 +310,16 @@ void Application::showEndCredits()
 	printcnt("Prajeen R G, Roll No : 20");
 	printcnt("Vishal B, Roll No : 40");
 	printLines(3);
-}
+}*/
 
 void Application::runApp()
 {
 	showMainScreen();
 	do
 	{
-		clearScreen();
+		std::system("cls");
 		int menuChoice = getMainMenuChoice();
-		printNextLine();
+		std::cout << std::endl;
 		if (menuChoice == 0) {
 			manageEncryption();
 		}
@@ -335,7 +330,7 @@ void Application::runApp()
 			break;
 		}
 	} while (true);
-	clearScreen();
-	showEndCredits();
-	std::cin.get();
+	std::system("cls");
+	// showEndCredits();
+	std::system("pause>nul");
 }

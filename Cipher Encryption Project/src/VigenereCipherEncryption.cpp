@@ -2,7 +2,7 @@
 
 std::string VigenereCipherEncryption::getEncryptionKey()
 {
-	return "4x4";
+	return "5x5";
 }
 
 char VigenereCipherEncryption::encodeKeyValue(char value)

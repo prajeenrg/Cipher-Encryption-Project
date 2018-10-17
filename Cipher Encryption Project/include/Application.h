@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include <ctime>
 #include <Windows.h>
 
@@ -11,7 +12,6 @@
 #include "XorCipherEncryption.h"
 #include "VigenereCipherEncryption.h"
 #include "StreamCipherEncryption.h"
-#include "Utils.h"
 
 class Application
 {
@@ -27,10 +27,8 @@ class Application
 	std::string *getInputInfo();
 	CipherEncryption *getSuitableCipher(int);
 	void manageEncryption();
-	void showEncryptedMessage(std::string *);
 	void manageDecryption();
-	void showDecryptedCipher(std::string *);
-	void showEndCredits();
+	// void showEndCredits();
 	void saveInfoToFile(std::string *);
 
   public:

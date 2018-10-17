@@ -39,9 +39,6 @@
     <ClCompile Include="src\TransposeCipherEncryption.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Utils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\VigenereCipherEncryption.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -72,9 +69,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\TransposeCipherEncryption.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\VigenereCipherEncryption.h">

@@ -144,7 +144,6 @@
     <ClInclude Include="include\FileUtils.h" />
     <ClInclude Include="include\StreamCipherEncryption.h" />
     <ClInclude Include="include\TransposeCipherEncryption.h" />
-    <ClInclude Include="include\Utils.h" />
     <ClInclude Include="include\VigenereCipherEncryption.h" />
     <ClInclude Include="include\XorCipherEncryption.h" />
   </ItemGroup>
@@ -157,7 +156,6 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\StreamCipherEncryption.cpp" />
     <ClCompile Include="src\TransposeCipherEncryption.cpp" />
-    <ClCompile Include="src\Utils.cpp" />
     <ClCompile Include="src\VigenereCipherEncryption.cpp" />
     <ClCompile Include="src\XorCipherEncryption.cpp" />
   </ItemGroup>
