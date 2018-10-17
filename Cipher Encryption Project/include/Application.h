@@ -15,7 +15,8 @@ class Application
 	void showMainMenu();
 	char getMainMenuChoice();
 	void showEncryptionOptions();
-	char getEncryptionChoice();
+	void showMainScreen();
+	int retrieveMenuChoice(std::string, std::string []);
 	void showInputOptions();
 	char getInputChoice();
 	std::string getFileInfo();
