@@ -1,5 +1,10 @@
 #include "Application.h"
 
+Application::Application() {
+	wAttrs = 0;
+	hnd = GetStdHandle(STD_OUTPUT_HANDLE);
+}
+
 char Application::getEncryptionChoice()
 {
 	char choice = 0;
@@ -156,7 +161,12 @@ void Application::showEncryptionOptions()
 
 void Application::showMainScreen()
 {
-	std::cout << R"(
+	srand(time(NULL));
+	while (true) {
+		std::system("cls");
+		wAttrs = rand() % 14 + 1;
+		SetConsoleTextAttribute(hnd, wAttrs);
+		std::cout << R"(
         
       /$$$$$$  /$$           /$$
      /$$__  $$|__/          | $$
@@ -193,11 +203,50 @@ void Application::showMainScreen()
                             \______/
 
         )" << std::endl;
+		std::cout << "Press Enter to Continue........";
+		if (GetAsyncKeyState(VK_RETURN)) {
+			return;
+		}
+		Sleep(150);
+	}
 }
 
-int Application::retrieveMenuChoice(std::string title, std::string choices[])
+int Application::retrieveMenuChoice(std::string title, std::string choices[], int size)
 {
-	return 0;
+	int pointer = 0;
+	while (true) {
+		std::system("cls");
+		SetConsoleTextAttribute(hnd, wAttrs);
+		std::cout << title << std::endl;
+		for (int i = 0; i != size; i++) {
+			std::cout << '\t';
+			if (i == pointer) {
+				SetConsoleTextAttribute(hnd, wAttrs * 16);
+			}
+			std::cout << choices[i] << std::endl;
+			SetConsoleTextAttribute(hnd, wAttrs);
+		}
+		while (true) {
+			std::system("pause>nul");
+			if (GetAsyncKeyState(VK_UP)) {
+				pointer--;
+				if (pointer < 0) {
+					pointer = size - 1;
+				}
+				break;
+			}
+			else if (GetAsyncKeyState(VK_DOWN)) {
+				pointer++;
+				if (pointer == size) {
+					pointer = 0;
+					break;
+				}
+			}
+			else if (GetAsyncKeyState(VK_RETURN)) {
+				return pointer;
+			}
+		}
+	}
 }
 
 void Application::showMainMenu()

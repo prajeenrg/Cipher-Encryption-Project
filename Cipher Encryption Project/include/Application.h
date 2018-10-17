@@ -1,4 +1,7 @@
 #pragma once
+#include <ctime>
+#include <Windows.h>
+
 #include "CipherEncryption.h"
 #include "BitwiseCipherEncryption.h"
 #include "BlockCipherEncryption.h"
@@ -12,6 +15,8 @@
 
 class Application
 {
+	WORD wAttrs;
+	HANDLE hnd;
 	void showMainMenu();
 	char getMainMenuChoice();
 	void showEncryptionOptions();
@@ -31,5 +36,6 @@ class Application
 	void saveInfoToFile(std::string *);
 
   public:
+	Application();
 	void runApp();
 };
