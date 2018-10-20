@@ -30,25 +30,21 @@ std::string *Application::getInputInfo()
 {
 	int inputForm = getInputChoice();
 	std::string *input;
+	std::cout << std::endl;
 	if (inputForm == 0)
 	{
 		input = new std::string;
-		std::cout << std::endl;
-		std::cout << "Please end your message with a backtick symbol (`)";
-		std::cout << std::endl;
+		std::cout << "Please end your message with a backtick symbol (`)\n";
 		std::getline(std::cin, *input, '`');
 	}
 	else
 	{
-		std::cout << std::endl;
 		std::string fileloc = getFileInfo();
 		FileUtils file;
 		input = file.readFromFile(fileloc);
 		while (input == nullptr)
 		{
-			std::cout << std::endl;
-			std::cout << "The file requested is not accessible. Try again.";
-			std::cout << std::endl;
+			std::cout << "\nThe file requested is not accessible. Try again.\n";
 			fileloc = getFileInfo();
 			input = file.readFromFile(fileloc);
 		}
