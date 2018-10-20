@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <ctime>
+#include <regex>
 #include <Windows.h>
 
 #include "CipherEncryption.h"

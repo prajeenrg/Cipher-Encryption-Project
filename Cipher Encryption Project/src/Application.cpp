@@ -34,7 +34,7 @@ std::string *Application::getInputInfo()
 	{
 		input = new std::string;
 		std::cout << std::endl;
-		std::cout << "\tPlease end your message with a backtick symbol (`)";
+		std::cout << "Please end your message with a backtick symbol (`)";
 		std::cout << std::endl;
 		std::getline(std::cin, *input, '`');
 	}
@@ -230,64 +230,62 @@ void Application::manageEncryption()
 	CipherEncryption *cipher = getSuitableCipher(encryptionChoice);
 	std::string *encrypted = cipher->encrypt(message);
 	delete message;
-	std::cout << std::endl;
 	char choice;
-	std::cout << "Do you want to see encrypted message (Y/n) ? ";
+	std::cout << "\nDo you want to see encrypted message (Y/n) ? ";
 	std::cin >> choice;
 	if (tolower(choice) == 'y')
 	{
-		std::cout << std::endl;
-		std::cout << "The information has been encrypted to the following : " << std::endl;
+		std::cout << "\nThe information has been encrypted to the following :\n";
 		std::cout << encrypted->c_str() << std::endl;
 	}
-	std::cout << std::endl;
-	std::cout << "Do you want to save encrypted message ? ";
+	std::cout << "\nDo you want to save encrypted message (Y/n) ? ";
 	std::cin >> choice;
 	if (tolower(choice) == 'y')
 	{
 		std::cout << std::endl;
+		std::cin.ignore();
 		saveInfoToFile(encrypted);
 	}
 	delete encrypted;
 	delete cipher;
 }
 
-// TODO : needs some refactoring
 void Application::manageDecryption()
 {
 	std::string *message = getInputInfo();
-	std::string key = message->substr(message->size() - 3, 3);
-	int type = 0;
-	if (key.find('x') != 1 || key[0] != key[2])
+	std::string key = message->substr(message->size() - 3);
+	std::regex match_key(R"(([0-6])x\1)");
+	if (std::regex_match(key, match_key) == false)
 	{
-		std::cout << std::endl << "There is no suitable cipher available for decryption.";
+		std::cout << "\nThere is no suitable cipher available for decryption.";
 		std::system("pause>nul");
+		delete message;
 		return;
 	}
-	else
-	{
-		type = key[0] - '0';
+	*message = message->substr(0, message->size() - 4);
+	if (message->empty()) {
+		std::cout << "\nThe cipher text doesn't contain any information (-_-) .";
+		std::system("pause>nul");
+		delete message;
+		return;
 	}
-	*message = message->substr(0, message->size() - 3);
-	CipherEncryption *cipher = getSuitableCipher(type);
+	CipherEncryption *cipher = getSuitableCipher(key[0] - '0');
 	std::string *decrypted = cipher->decrypt(message);
 	delete message;
-	char choice= 0;
-	std::cout << "Do you want to see decrypted message (Y/n) ? ";
+	char choice;
+	std::cout << "\nDo you want to see decrypted message (Y/n) ? ";
 	std::cin >> choice;
 	if (tolower(choice) ==  'y')
 	{
-		std::cout << std::endl;
-		std::cout << "The given information has been decrypted to the following : ";
-		std::cout << std::endl;
+		std::cout << "\nThe given information has been decrypted to the following :\n";
 		std::cout << decrypted->c_str() << std::endl;
 	}
-	std::cout << std::endl;
-	std::cout << "Do you want to save decrypted message (Y/n) ?";
+	std::cout << "\nDo you want to save decrypted message (Y/n) ?";
 	std::cin >> choice;
 	if (tolower(choice) == 'y')
 	{
 		std::cout << std::endl;
+		std::cin.ignore();
 		saveInfoToFile(decrypted);
 	}
 	delete decrypted;
