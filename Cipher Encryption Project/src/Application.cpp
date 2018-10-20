@@ -222,7 +222,6 @@ void Application::saveInfoToFile(std::string *content)
 	std::system("pause>nul");
 }
 
-// TODO : needs some refactoring
 void Application::manageEncryption()
 {
 	int encryptionChoice = getEncryptionChoice();
@@ -232,20 +231,19 @@ void Application::manageEncryption()
 	std::string *encrypted = cipher->encrypt(message);
 	delete message;
 	std::cout << std::endl;
-	char seeEncrypted = 0;
+	char choice;
 	std::cout << "Do you want to see encrypted message (Y/n) ? ";
-	std::cin >> seeEncrypted;
-	if (tolower(seeEncrypted) == 'y')
+	std::cin >> choice;
+	if (tolower(choice) == 'y')
 	{
 		std::cout << std::endl;
 		std::cout << "The information has been encrypted to the following : " << std::endl;
 		std::cout << encrypted->c_str() << std::endl;
 	}
 	std::cout << std::endl;
-	char saveEncrypted = 0;
-	std::cout << "Do you want to save encrypted message (Y/n) ? ";
-	std::cin >> saveEncrypted;
-	if (tolower(saveEncrypted) ==  'y')
+	std::cout << "Do you want to save encrypted message ? ";
+	std::cin >> choice;
+	if (tolower(choice) == 'y')
 	{
 		std::cout << std::endl;
 		saveInfoToFile(encrypted);
@@ -274,21 +272,20 @@ void Application::manageDecryption()
 	CipherEncryption *cipher = getSuitableCipher(type);
 	std::string *decrypted = cipher->decrypt(message);
 	delete message;
-	char seeDecrypted = 0;
+	char choice= 0;
 	std::cout << "Do you want to see decrypted message (Y/n) ? ";
-	std::cin >> seeDecrypted;
-	if (tolower(seeDecrypted) ==  'y')
+	std::cin >> choice;
+	if (tolower(choice) ==  'y')
 	{
 		std::cout << std::endl;
 		std::cout << "The given information has been decrypted to the following : ";
 		std::cout << std::endl;
 		std::cout << decrypted->c_str() << std::endl;
 	}
-	std::cout << std::endl;;
-	char saveDecrypted = 0;
+	std::cout << std::endl;
 	std::cout << "Do you want to save decrypted message (Y/n) ?";
-	std::cin >> saveDecrypted;
-	if (tolower(saveDecrypted) == 'y')
+	std::cin >> choice;
+	if (tolower(choice) == 'y')
 	{
 		std::cout << std::endl;
 		saveInfoToFile(decrypted);
@@ -332,5 +329,5 @@ void Application::runApp()
 	} while (true);
 	std::system("cls");
 	// showEndCredits();
-	std::system("pause>nul");
+	// std::system("pause>nul");
 }
