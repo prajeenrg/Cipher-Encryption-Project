@@ -1,7 +1,7 @@
 #include "Application.h"
 
 Application::Application() {
-	hnd = GetStdHandle(STD_OUTPUT_HANDLE);
+	handle = GetStdHandle(STD_OUTPUT_HANDLE);
 }
 
 int Application::getEncryptionChoice()
@@ -30,6 +30,7 @@ std::string *Application::getInputInfo()
 	int inputForm = getInputChoice();
 	std::string *input;
 	std::cout << std::endl;
+	setCursorVisiblity(true);
 	if (inputForm == 0)
 	{
 		input = new std::string;
@@ -48,36 +49,23 @@ std::string *Application::getInputInfo()
 			input = file.readFromFile(fileloc);
 		}
 	}
+	setCursorVisiblity(false);
 	return input;
 }
 
 std::string Application::getFileInfo()
 {
-	std::string filedir, filename;
-	std::cout << "Where can I get the file ? ";
+	std::string filedir;
+	std::cout << "What is the complete file path ? ";
 	std::getline(std::cin, filedir);
-	std::cout << "What is the name of the file ? ";
-	std::getline(std::cin, filename);
-	if (!filedir.empty())
-	{
-		filedir.push_back('\\');
-	}
-	filedir.append(filename);
 	return filedir;
 }
 
 std::string Application::getSaveFileInfo()
 {
-	std::string filedir, filename;
-	std::cout << "Where should the file be stored ? ";
+	std::string filedir;
+	std::cout << "What should be the file path ? ";
 	std::getline(std::cin, filedir);
-	std::cout << "What should be the name of the file ? ";
-	std::getline(std::cin, filename);
-	if (!filedir.empty())
-	{
-		filedir.push_back('\\');
-	}
-	filedir.append(filename);
 	return filedir;
 }
 
@@ -123,7 +111,7 @@ void Application::showMainScreen()
 	while (true) {
 		std::system("cls");
 		WORD wAttrs = rand() % 14 + 1;
-		SetConsoleTextAttribute(hnd, wAttrs);
+		SetConsoleTextAttribute(handle, wAttrs);
 		std::cout << R"(
         
       /$$$$$$  /$$           /$$
@@ -161,12 +149,29 @@ void Application::showMainScreen()
                             \______/
 
         )" << std::endl;
-		std::cout << "\tPress Enter to Continue........";
+		std::cout << std::setw(68) << "Press Enter to Continue........";
 		if (GetAsyncKeyState(VK_RETURN)) {
+			SetConsoleTextAttribute(handle, FOREGROUND_GREEN_BRIGHT);
 			return;
 		}
 		Sleep(SLEEP_DURATION);
 	}
+}
+
+void Application::setWindowSize(int width, int height)
+{
+	HWND console = GetConsoleWindow();
+	RECT r;
+	GetWindowRect(console, &r);
+	MoveWindow(console, r.left, r.top, width, height, TRUE);
+}
+
+void Application::setCursorVisiblity(bool isVisible)
+{
+	CONSOLE_CURSOR_INFO cursorInfo;
+	GetConsoleCursorInfo(handle, &cursorInfo);
+	cursorInfo.bVisible = isVisible;
+	SetConsoleCursorInfo(handle, &cursorInfo);
 }
 
 int Application::retrieveMenuChoice(std::string title, std::string choices[], int size)
@@ -174,16 +179,18 @@ int Application::retrieveMenuChoice(std::string title, std::string choices[], in
 	int pointer = 0;
 	while (true) {
 		std::system("cls");
-		SetConsoleTextAttribute(hnd, FOREGROUND_GREEN_BRIGHT);
+		std::cout << std::string(SCREEN_WIDTH, '*') << std::endl;
+		std::cout << std::setw(64) << "Cipher Encryption Project" << std::endl;
+		std::cout << std::string(SCREEN_WIDTH, '*') << std::endl;
 		std::cout << title << std::endl;
 		for (int i = 0; i != size; i++) {
 			std::cout << "  ";
 			if (i == pointer) {
-				SetConsoleTextAttribute(hnd, FOREGROUND_PURPLE_BRIGHT);
+				SetConsoleTextAttribute(handle, FOREGROUND_PURPLE_BRIGHT);
 				std::cout << "->";
 			}
 			std::cout << (i + 1) << ") " << choices[i] << std::endl;
-			SetConsoleTextAttribute(hnd, FOREGROUND_GREEN_BRIGHT);
+			SetConsoleTextAttribute(handle, FOREGROUND_GREEN_BRIGHT);
 		}
 		while (true) {
 			std::system("pause>nul");
@@ -228,6 +235,7 @@ void Application::manageEncryption()
 	std::string *encrypted = cipher->encrypt(message);
 	delete message;
 	char choice;
+	setCursorVisiblity(true);
 	std::cout << "\nDo you want to see encrypted message (Y/n) ? ";
 	std::cin >> choice;
 	if (tolower(choice) == 'y')
@@ -242,6 +250,7 @@ void Application::manageEncryption()
 		std::cout << std::endl;
 		saveInfoToFile(encrypted);
 	}
+	setCursorVisiblity(false);
 	delete encrypted;
 	delete cipher;
 }
@@ -269,6 +278,7 @@ void Application::manageDecryption()
 	std::string *decrypted = cipher->decrypt(message);
 	delete message;
 	char choice;
+	setCursorVisiblity(true);
 	std::cout << "\nDo you want to see decrypted message (Y/n) ? ";
 	std::cin >> choice;
 	if (tolower(choice) ==  'y')
@@ -283,6 +293,7 @@ void Application::manageDecryption()
 		std::cout << std::endl;
 		saveInfoToFile(decrypted);
 	}
+	setCursorVisiblity(false);
 	delete decrypted;
 	delete message;
 }
@@ -304,6 +315,8 @@ void Application::showEndCredits()
 
 void Application::runApp()
 {
+	setWindowSize(SCREEN_WIDTH * CHARACTER_WIDTH, SCREEN_HEIGHT * CHARACTER_HEIGHT);
+	setCursorVisiblity(false);
 	showMainScreen();
 	do
 	{
