@@ -39,7 +39,7 @@ class Application
 	CipherEncryption *getSuitableCipher(int);
 	void manageEncryption();
 	void manageDecryption();
-	// void showEndCredits();
+	void showEndCredits();
 	void saveInfoToFile(std::string *);
 
   public:

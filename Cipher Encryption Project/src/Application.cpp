@@ -298,20 +298,20 @@ void Application::manageDecryption()
 	delete message;
 }
 
-/* Currently disabled for better working
 void Application::showEndCredits()
 {
 	std::system("cls");
 	std::string title = "Project done by the following students of XII - A :";
-	std::string decoration(title.size(), '-');
-	printHeading(title, decoration);
-	printLines(3);
-	printcnt("Abhishek Sriram, Roll No : 2");
-	printcnt("Ashwin Kumar M, Roll No : 3");
-	printcnt("Prajeen R G, Roll No : 20");
-	printcnt("Vishal B, Roll No : 40");
-	printLines(3);
-}*/
+	std::string decoration(SCREEN_WIDTH, '*');
+	std::cout << decoration << std::endl;
+	std::cout << std::setw(78) << title << std::endl;
+	std::cout << decoration << std::endl;
+	std::cout << "\n\n\n";
+	std::cout << std::setw(66) << "Abhishek Sriram, Roll No : 2" << std::endl;
+	std::cout << std::setw(66) << "Ashwin Kumar M, Roll No : 3" << std::endl;
+	std::cout << std::setw(65) << "Prajeen R G, Roll No : 20" << std::endl;
+	std::cout << std::setw(63) << "Vishal B, Roll No : 40";
+}
 
 void Application::runApp()
 {
@@ -334,6 +334,6 @@ void Application::runApp()
 		}
 	} while (true);
 	std::system("cls");
-	// showEndCredits();
-	// std::system("pause>nul");
+	showEndCredits();
+	std::system("pause>nul");
 }
