@@ -89,7 +89,7 @@ std::string *VigenereCipherEncryption::decrypt(std::string *cipher)
 	std::string *output = new std::string;
 	for (char &letter : *cipher)
 	{
-		output->push_back(encodeKeyValue(letter));
+		output->push_back(decodeKeyValue(letter));
 	}
 	return output;
 }

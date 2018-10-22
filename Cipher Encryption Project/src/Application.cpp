@@ -25,6 +25,11 @@ int Application::getInputChoice()
 	return retrieveMenuChoice(title, options, 2);
 }
 
+int Application::getCursorPos(int length)
+{
+	return static_cast<int>((SCREEN_WIDTH + length) / 2);
+}
+
 std::string *Application::getInputInfo()
 {
 	int inputForm = getInputChoice();
@@ -96,11 +101,13 @@ CipherEncryption *Application::getSuitableCipher(int options)
 	case CipherType::VIGENERE:
 		cipher = new VigenereCipherEncryption;
 		break;
-	default:
+	case CipherType::XOR:
 	{
 		char key = static_cast<char>(27);
 		cipher = new XorCipherEncryption(key);
 	}
+	default:
+		return nullptr;
 	}
 	return cipher;
 }
@@ -149,7 +156,7 @@ void Application::showMainScreen()
                             \______/
 
         )" << std::endl;
-		std::cout << std::setw(68) << "Press Enter to Continue........";
+		std::cout << std::setw(getCursorPos(31)) << "Press Enter to Continue........";
 		if (GetAsyncKeyState(VK_RETURN)) {
 			SetConsoleTextAttribute(handle, FOREGROUND_GREEN_BRIGHT);
 			return;
@@ -180,7 +187,7 @@ int Application::retrieveMenuChoice(std::string title, std::string choices[], in
 	while (true) {
 		std::system("cls");
 		std::cout << std::string(SCREEN_WIDTH, '*') << std::endl;
-		std::cout << std::setw(64) << "Cipher Encryption Project" << std::endl;
+		std::cout << std::setw(getCursorPos(25)) << "Cipher Encryption Project" << std::endl;
 		std::cout << std::string(SCREEN_WIDTH, '*') << std::endl;
 		std::cout << title << std::endl;
 		for (int i = 0; i != size; i++) {
@@ -260,14 +267,7 @@ void Application::manageDecryption()
 	std::string *message = getInputInfo();
 	std::string key = message->substr(message->size() - 3);
 	std::regex match_key(R"(([0-6])x\1)");
-	if (std::regex_match(key, match_key) == false)
-	{
-		std::cout << "\nThere is no suitable cipher available for decryption.";
-		std::system("pause>nul");
-		delete message;
-		return;
-	}
-	*message = message->substr(0, message->size() - 4);
+	*message = message->substr(0, message->size() - 3);
 	if (message->empty()) {
 		std::cout << "\nThe cipher text doesn't contain any information (-_-) .";
 		std::system("pause>nul");
@@ -275,6 +275,13 @@ void Application::manageDecryption()
 		return;
 	}
 	CipherEncryption *cipher = getSuitableCipher(key[0] - '0');
+	if (!std::regex_match(key, match_key) || !cipher)
+	{
+		std::cout << "\nThere is no suitable cipher available for decryption.";
+		std::system("pause>nul");
+		delete message;
+		return;
+	}
 	std::string *decrypted = cipher->decrypt(message);
 	delete message;
 	char choice;
@@ -295,7 +302,6 @@ void Application::manageDecryption()
 	}
 	setCursorVisiblity(false);
 	delete decrypted;
-	delete message;
 }
 
 void Application::showEndCredits()
@@ -304,13 +310,13 @@ void Application::showEndCredits()
 	std::string title = "Project done by the following students of XII - A :";
 	std::string decoration(SCREEN_WIDTH, '*');
 	std::cout << decoration << std::endl;
-	std::cout << std::setw(78) << title << std::endl;
+	std::cout << std::setw(getCursorPos(51)) << title << std::endl;
 	std::cout << decoration << std::endl;
 	std::cout << "\n\n\n";
-	std::cout << std::setw(66) << "Abhishek Sriram, Roll No : 2" << std::endl;
-	std::cout << std::setw(66) << "Ashwin Kumar M, Roll No : 3" << std::endl;
-	std::cout << std::setw(65) << "Prajeen R G, Roll No : 20" << std::endl;
-	std::cout << std::setw(63) << "Vishal B, Roll No : 40";
+	std::cout << std::setw(getCursorPos(28)) << "Abhishek Sriram, Roll No : 2" << std::endl;
+	std::cout << std::setw(getCursorPos(27)) << "Ashwin Kumar M, Roll No : 3" << std::endl;
+	std::cout << std::setw(getCursorPos(25)) << "Prajeen R G, Roll No : 20" << std::endl;
+	std::cout << std::setw(getCursorPos(22)) << "Vishal B, Roll No : 40";
 }
 
 void Application::runApp()

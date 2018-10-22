@@ -1,5 +1,5 @@
 #pragma once
-#define SCREEN_WIDTH 104
+#define SCREEN_WIDTH 105
 #define SCREEN_HEIGHT 40
 #define CHARACTER_WIDTH 8
 #define CHARACTER_HEIGHT 14
@@ -33,6 +33,7 @@ class Application
 	void setCursorVisiblity(bool);
 	int retrieveMenuChoice(std::string, std::string [], int);
 	int getInputChoice();
+	int getCursorPos(int);
 	std::string getFileInfo();
 	std::string getSaveFileInfo();
 	std::string *getInputInfo();
