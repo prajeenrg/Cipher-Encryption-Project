@@ -1,7 +1,6 @@
 #include "Application.h"
 
 Application::Application() {
-	wAttrs = 0;
 	hnd = GetStdHandle(STD_OUTPUT_HANDLE);
 }
 
@@ -123,7 +122,7 @@ void Application::showMainScreen()
 	srand(static_cast<unsigned int>(time(NULL)));
 	while (true) {
 		std::system("cls");
-		wAttrs = rand() % 14 + 1;
+		WORD wAttrs = rand() % 14 + 1;
 		SetConsoleTextAttribute(hnd, wAttrs);
 		std::cout << R"(
         
@@ -166,7 +165,7 @@ void Application::showMainScreen()
 		if (GetAsyncKeyState(VK_RETURN)) {
 			return;
 		}
-		Sleep(150);
+		Sleep(SLEEP_DURATION);
 	}
 }
 
@@ -175,15 +174,16 @@ int Application::retrieveMenuChoice(std::string title, std::string choices[], in
 	int pointer = 0;
 	while (true) {
 		std::system("cls");
-		SetConsoleTextAttribute(hnd, wAttrs);
+		SetConsoleTextAttribute(hnd, FOREGROUND_GREEN_BRIGHT);
 		std::cout << title << std::endl;
 		for (int i = 0; i != size; i++) {
 			std::cout << "  ";
 			if (i == pointer) {
-				SetConsoleTextAttribute(hnd, wAttrs * 16);
+				SetConsoleTextAttribute(hnd, FOREGROUND_PURPLE_BRIGHT);
+				std::cout << "->";
 			}
 			std::cout << (i + 1) << ") " << choices[i] << std::endl;
-			SetConsoleTextAttribute(hnd, wAttrs);
+			SetConsoleTextAttribute(hnd, FOREGROUND_GREEN_BRIGHT);
 		}
 		while (true) {
 			std::system("pause>nul");
@@ -204,13 +204,14 @@ int Application::retrieveMenuChoice(std::string title, std::string choices[], in
 			else if (GetAsyncKeyState(VK_RETURN)) {
 				return pointer;
 			}
-			Sleep(150);
+			Sleep(SLEEP_DURATION);
 		}
 	}
 }
 
 void Application::saveInfoToFile(std::string *content)
 {
+	std::cin.ignore();
 	std::string filedir = getSaveFileInfo();
 	FileUtils file;
 	file.writeToFile(filedir, content);
@@ -239,7 +240,6 @@ void Application::manageEncryption()
 	if (tolower(choice) == 'y')
 	{
 		std::cout << std::endl;
-		std::cin.ignore();
 		saveInfoToFile(encrypted);
 	}
 	delete encrypted;
@@ -281,7 +281,6 @@ void Application::manageDecryption()
 	if (tolower(choice) == 'y')
 	{
 		std::cout << std::endl;
-		std::cin.ignore();
 		saveInfoToFile(decrypted);
 	}
 	delete decrypted;

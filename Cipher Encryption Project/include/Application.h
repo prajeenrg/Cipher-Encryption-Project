@@ -1,4 +1,8 @@
 #pragma once
+#define FOREGROUND_GREEN_BRIGHT 0xA
+#define FOREGROUND_PURPLE_BRIGHT 0xD
+#define SLEEP_DURATION 200
+
 #include <iostream>
 #include <ctime>
 #include <regex>
@@ -16,7 +20,6 @@
 
 class Application
 {
-	WORD wAttrs;
 	HANDLE hnd;
 	int getMainMenuChoice();
 	int getEncryptionChoice();
