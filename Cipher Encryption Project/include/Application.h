@@ -1,11 +1,11 @@
 #pragma once
-#define SCREEN_WIDTH 105
-#define SCREEN_HEIGHT 40
-#define CHARACTER_WIDTH 8
-#define CHARACTER_HEIGHT 14
-#define FOREGROUND_GREEN_BRIGHT 0xA
-#define FOREGROUND_PURPLE_BRIGHT 0xD
-#define SLEEP_DURATION 200
+constexpr auto SCREEN_WIDTH = 105;
+constexpr auto SCREEN_HEIGHT = 40;
+constexpr auto CHARACTER_WIDTH = 8.5;
+constexpr auto CHARACTER_HEIGHT = 15;
+constexpr auto FOREGROUND_YELLOW_BRIGHT = 0xE;
+constexpr auto FOREGROUND_PURPLE_BRIGHT = 0xD;
+constexpr auto SLEEP_DURATION = 200;
 
 #include <iostream>
 #include <iomanip>
@@ -33,7 +33,8 @@ class Application
 	void setCursorVisiblity(bool);
 	int retrieveMenuChoice(std::string, std::string [], int);
 	int getInputChoice();
-	int getCursorPos(int);
+	int getSpacingProps(int);
+	void gotoCenter(int);
 	std::string getFileInfo();
 	std::string getSaveFileInfo();
 	std::string *getInputInfo();

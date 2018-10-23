@@ -25,7 +25,7 @@ int Application::getInputChoice()
 	return retrieveMenuChoice(title, options, 2);
 }
 
-int Application::getCursorPos(int length)
+int Application::getSpacingProps(int length)
 {
 	return static_cast<int>((SCREEN_WIDTH + length) / 2);
 }
@@ -156,9 +156,9 @@ void Application::showMainScreen()
                             \______/
 
         )" << std::endl;
-		std::cout << std::setw(getCursorPos(31)) << "Press Enter to Continue........";
+		std::cout << std::setw(getSpacingProps(31)) << "Press Enter to Continue........";
 		if (GetAsyncKeyState(VK_RETURN)) {
-			SetConsoleTextAttribute(handle, FOREGROUND_GREEN_BRIGHT);
+			SetConsoleTextAttribute(handle, FOREGROUND_YELLOW_BRIGHT);
 			return;
 		}
 		Sleep(SLEEP_DURATION);
@@ -186,9 +186,11 @@ int Application::retrieveMenuChoice(std::string title, std::string choices[], in
 	int pointer = 0;
 	while (true) {
 		std::system("cls");
+		SetConsoleTextAttribute(handle, FOREGROUND_PURPLE_BRIGHT);
 		std::cout << std::string(SCREEN_WIDTH, '*') << std::endl;
-		std::cout << std::setw(getCursorPos(25)) << "Cipher Encryption Project" << std::endl;
-		std::cout << std::string(SCREEN_WIDTH, '*') << std::endl;
+		std::cout << std::setw(getSpacingProps(25)) << "Cipher Encryption Project" << std::endl;
+		std::cout << std::string(SCREEN_WIDTH, '*') << std::endl << std::endl;
+		SetConsoleTextAttribute(handle, FOREGROUND_YELLOW_BRIGHT);
 		std::cout << title << std::endl;
 		for (int i = 0; i != size; i++) {
 			std::cout << "  ";
@@ -197,7 +199,7 @@ int Application::retrieveMenuChoice(std::string title, std::string choices[], in
 				std::cout << "->";
 			}
 			std::cout << (i + 1) << ") " << choices[i] << std::endl;
-			SetConsoleTextAttribute(handle, FOREGROUND_GREEN_BRIGHT);
+			SetConsoleTextAttribute(handle, FOREGROUND_YELLOW_BRIGHT);
 		}
 		while (true) {
 			std::system("pause>nul");
@@ -304,24 +306,33 @@ void Application::manageDecryption()
 	delete decrypted;
 }
 
+void Application::gotoCenter(int size) {
+	int lines = (SCREEN_HEIGHT - size) / 2;
+	for (int i = 0; i < lines; i++) {
+		std::cout << std::endl;
+	}
+}
+
 void Application::showEndCredits()
 {
 	std::system("cls");
 	std::string title = "Project done by the following students of XII - A :";
-	std::string decoration(SCREEN_WIDTH, '*');
+	std::string decoration(SCREEN_WIDTH, '-');
+	SetConsoleTextAttribute(handle, FOREGROUND_PURPLE_BRIGHT);
 	std::cout << decoration << std::endl;
-	std::cout << std::setw(getCursorPos(51)) << title << std::endl;
+	std::cout << std::setw(getSpacingProps(51)) << title << std::endl;
 	std::cout << decoration << std::endl;
-	std::cout << "\n\n\n";
-	std::cout << std::setw(getCursorPos(28)) << "Abhishek Sriram, Roll No : 2" << std::endl;
-	std::cout << std::setw(getCursorPos(27)) << "Ashwin Kumar M, Roll No : 3" << std::endl;
-	std::cout << std::setw(getCursorPos(25)) << "Prajeen R G, Roll No : 20" << std::endl;
-	std::cout << std::setw(getCursorPos(22)) << "Vishal B, Roll No : 40";
+	gotoCenter(10);
+	SetConsoleTextAttribute(handle, FOREGROUND_YELLOW_BRIGHT);
+	std::cout << std::setw(getSpacingProps(28)) << "Abhishek Sriram, Roll No : 2" << std::endl;
+	std::cout << std::setw(getSpacingProps(27)) << "Ashwin Kumar M, Roll No : 3" << std::endl;
+	std::cout << std::setw(getSpacingProps(25)) << "Prajeen R G, Roll No : 20" << std::endl;
+	std::cout << std::setw(getSpacingProps(22)) << "Vishal B, Roll No : 40";
 }
 
 void Application::runApp()
 {
-	setWindowSize(SCREEN_WIDTH * CHARACTER_WIDTH, SCREEN_HEIGHT * CHARACTER_HEIGHT);
+	setWindowSize(static_cast<int>(SCREEN_WIDTH * CHARACTER_WIDTH), static_cast<int>(SCREEN_HEIGHT * CHARACTER_HEIGHT));
 	setCursorVisiblity(false);
 	showMainScreen();
 	do

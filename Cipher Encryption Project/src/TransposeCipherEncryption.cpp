@@ -8,7 +8,7 @@ std::string TransposeCipherEncryption::getEncryptionKey()
 std::string *TransposeCipherEncryption::encrypt(std::string *message)
 {
 	std::string *output = new std::string;
-	int blockSize = static_cast<int>(floor(sqrt(message->size()))) + 1;
+	std::string::size_type blockSize = static_cast<std::string::size_type>(floor(sqrt(message->size()))) + 1;
 	for (std::string::size_type i = 0; i < blockSize; i++) {
 		for (std::string::size_type j = 0; j < blockSize; j++) {
 			std::string::size_type index = (j * blockSize) + i;
@@ -30,7 +30,7 @@ std::string *TransposeCipherEncryption::encrypt(std::string *message)
 std::string *TransposeCipherEncryption::decrypt(std::string *cipher)
 {
 	std::string *output = new std::string;
-	int blockSize = static_cast<int>(sqrt(cipher->size()));
+	std::string::size_type blockSize = static_cast<std::string::size_type>(sqrt(cipher->size()));
 	for (std::string::size_type i = 0; i < blockSize; i++) {
 		for (std::string::size_type j = 0; j < blockSize; j++) {
 			std::string::size_type index = (j * blockSize) + i;
